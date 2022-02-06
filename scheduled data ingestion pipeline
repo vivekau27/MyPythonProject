@@ -12,3 +12,38 @@ checks filteration etc.
 After which the data will be staged temorarliy in a staging layer.
 
 Data in staging layer would be compared to target  table where we would be using merge to implement CDC.
+
+MERGE INTO target_table
+USING staging_table
+ON target_table.id = staging_table.id
+WHEN MATCHED THEN
+  UPDATE SET
+    id = staging_table.id,
+    firstName = staging_table.firstName,
+    middleName = staging_table.middleName,
+    lastName = staging_table.lastName,
+    gender = staging_table.gender,
+    birthDate = staging_table.birthDate,
+    ssn = staging_table.ssn,
+    salary = staging_table.salary
+WHEN NOT MATCHED
+  THEN INSERT (
+    id,
+    firstName,
+    middleName,
+    lastName,
+    gender,
+    birthDate,
+    ssn,
+    salary
+  )
+  VALUES (
+    staging_table.id,
+    staging_table.firstName,
+    staging_table.middleName,
+    staging_table.lastName,
+    staging_table.gender,
+    staging_table.birthDate,
+    staging_table.ssn,
+    staging_table.salary
+  )
