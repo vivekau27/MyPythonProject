@@ -6,6 +6,13 @@ The file watches jobs will fetch files each day and put them in separate incomin
 After file copy we can have a file to check to see if the file recieved for that day is a zero byte file or it has some data. Based on this either we would proceed
 with the ingestion process or skip it for that day.
 
+
+Data Profiling/Quality checks:
+NULL/Empty Value Checks
+Summary of Numeric Columns
+Distinct Values for Columns of Interest
+Validity of data for Columns of Interest(example date_of_birth/year/ etc.)
+
 In ingestion we can implement an architecture where we load the raw data into a raw layer partitioned on date.
 After which the Data from raw layer will be taken and we would put some data quality checks on it , this would also be a time to validate mandatory data quality
 checks filteration etc.
@@ -13,6 +20,7 @@ After which the data will be staged temorarliy in a staging layer.
 
 Data in staging layer would be compared to target  table where we would be using merge to implement CDC.
 
+**********************************************
 MERGE INTO target_table
 USING staging_table
 ON target_table.id = staging_table.id
@@ -47,3 +55,6 @@ WHEN NOT MATCHED
     staging_table.ssn,
     staging_table.salary
   )
+**********************************************
+
+
